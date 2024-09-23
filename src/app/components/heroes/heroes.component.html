@@ -21,23 +21,4 @@
 
 <hr class="border-2 rounded border-slate-300">
 
-@if (selectedHero) {
-  <div class="flex flex-col">
-    <h2 class="text-xl">Hero details :
-      <span class="font-bold">
-        {{selectedHero.name | uppercase}}
-      </span>
-    </h2>
-
-    <div class="flex flex-row gap-5 mb-5">
-      <span>id: {{ selectedHero.id }}</span>
-      <span>name: {{ selectedHero.name }}</span>
-    </div>
-
-    <div>
-      <label for="name">Change hero name : </label>
-      <input class="border-2 border-slate-300 hover:border-slate-200 rounded p-1" id="name" [(ngModel)]="selectedHero.name"
-             placeholder="name">
-    </div>
-  </div>
-}
+<app-hero-detail [hero]="selectedHero"></app-hero-detail>
