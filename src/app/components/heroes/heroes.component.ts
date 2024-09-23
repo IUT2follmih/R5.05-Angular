@@ -16,9 +16,14 @@ import {HEROES} from "../../data/mock-heroes";
 })
 export class HeroesComponent {
   heroes = HEROES;
+  selectedHero?: HeroInterface;
+  onSelect(hero: HeroInterface): void {
+    this.selectedHero = hero;
+  }
 
   hero: HeroInterface = {
     id: 1,
     name: 'Windstorm'
   }
+  protected readonly onselect = onselect;
 }
