@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {HeroInterface} from "./heroInterface";
+import {HeroInterface} from "../../data/heroInterface";
 import {UpperCasePipe} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 
