@@ -1,0 +1,15 @@
+@if (messageService.messages.length) {
+  <section class="w-56 rounded p-3 bg-slate-200 absolute bottom-5 right-5 drop-shadow-md">
+    <div class="flex flex-row justify-between">
+      <h2 class="text-xl">
+        Messages :
+      </h2>
+      <button type="button" class="border-2 border-slate-300 px-2 py-1 rounded-xl" (click)="messageService.clear()">
+        🗑️
+      </button>
+    </div>
+    @for (message of messageService.messages; track message) {
+      {{message}}
+    }
+  </section>
+}

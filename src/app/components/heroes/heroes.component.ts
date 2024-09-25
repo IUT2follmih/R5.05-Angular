@@ -4,6 +4,7 @@ import {UpperCasePipe} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {HeroDetailComponent} from "../hero-detail/hero-detail.component";
 import {HeroService} from "../../services/hero.service";
+import {MessageService} from "../../services/message.service";
 
 @Component({
   selector: 'app-heroes',
@@ -20,7 +21,7 @@ export class HeroesComponent implements OnInit{
   heroes: HeroInterface[] = [];
   selectedHero?: HeroInterface;
 
-  constructor(private heroService: HeroService) {
+  constructor(private heroService: HeroService, private messageService: MessageService ) {
   }
 
   ngOnInit(): void {
@@ -29,6 +30,8 @@ export class HeroesComponent implements OnInit{
 
   onSelect(hero: HeroInterface): void {
     this.selectedHero = hero;
+    this.messageService.clear();
+    this.messageService.add(`HeroesComponent: Selected hero id=${hero.id}`);
   }
 
   getHeroes(): void {
