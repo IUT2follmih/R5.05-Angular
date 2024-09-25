@@ -5,6 +5,7 @@ import {FormsModule} from "@angular/forms";
 import {HeroDetailComponent} from "../hero-detail/hero-detail.component";
 import {HeroService} from "../../services/hero.service";
 import {MessageService} from "../../services/message.service";
+import {MessagesComponent} from "../messages/messages.component";
 
 @Component({
   selector: 'app-heroes',
@@ -12,7 +13,8 @@ import {MessageService} from "../../services/message.service";
   imports: [
     UpperCasePipe,
     FormsModule,
-    HeroDetailComponent
+    HeroDetailComponent,
+    MessagesComponent
   ],
   templateUrl: './heroes.component.html',
   styleUrl: './heroes.component.css'
