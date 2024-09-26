@@ -2,10 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {HeroInterface} from "../../data/heroInterface";
 import {UpperCasePipe} from "@angular/common";
 import {FormsModule} from "@angular/forms";
-import {HeroDetailComponent} from "../hero-detail/hero-detail.component";
 import {HeroService} from "../../services/hero.service";
 import {MessageService} from "../../services/message.service";
 import {MessagesComponent} from "../messages/messages.component";
+import {RouterLink, RouterOutlet} from "@angular/router";
+import {HeroDetailComponent} from "../hero-detail/hero-detail.component";
 
 @Component({
   selector: 'app-heroes',
@@ -13,8 +14,10 @@ import {MessagesComponent} from "../messages/messages.component";
   imports: [
     UpperCasePipe,
     FormsModule,
-    HeroDetailComponent,
-    MessagesComponent
+    MessagesComponent,
+    RouterOutlet,
+    RouterLink,
+    HeroDetailComponent
   ],
   templateUrl: './heroes.component.html',
   styleUrl: './heroes.component.css'
@@ -38,11 +41,6 @@ export class HeroesComponent implements OnInit{
 
   getHeroes(): void {
     this.heroService.getHeroes().subscribe(heroes => this.heroes = heroes);
-  }
-
-  hero: HeroInterface = {
-    id: 1,
-    name: 'Windstorm'
   }
   protected readonly onselect = onselect;
 }

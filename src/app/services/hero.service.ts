@@ -23,4 +23,10 @@ export class HeroService {
       }, 3000); });
     return heroes;*/
   }
+
+  getHeroById(id: number | undefined | null): Observable<HeroInterface | undefined> {
+    const hero = HEROES.find(h => h.id === id);
+    return of(hero);
+  }
+
 }
