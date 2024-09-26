@@ -28,5 +28,4 @@ export class HeroService {
     const hero = HEROES.find(h => h.id === id);
     return of(hero);
   }
-
 }
