@@ -1,31 +1,71 @@
 import {Injectable} from '@angular/core';
 import {HeroInterface} from "../data/heroInterface";
-import {HEROES} from "../data/mock-heroes";
-import {Observable, of} from "rxjs";
+// import {HEROES} from "../data/mock-heroes";
+import {Observable} from "rxjs";
 import {MessageService} from "./message.service";
+import {
+  addDoc,
+  collection,
+  collectionData,
+  deleteDoc,
+  doc,
+  docData,
+  Firestore,
+  updateDoc
+} from "@angular/fire/firestore";
 
 @Injectable({
   providedIn: 'root'
 })
 export class HeroService {
+  private static url = 'heroes';
 
-  constructor(private messageService: MessageService) {
+  constructor(private messageService: MessageService, private firestore: Firestore) {
   }
 
   getHeroes(): Observable<HeroInterface[]> {
-    const heroes = of(HEROES);
-    this.messageService.add('Heroes fetched')
-    return heroes;
-    /*const heroes: Observable<HeroInterface[]> = new Observable(observer => {
-      observer.next(HEROES.slice(0,2)); // 2 éléments envoyés
-      setTimeout(() => {
-        observer.next(HEROES); observer.complete();
-      }, 3000); });
-    return heroes;*/
+    const heroCollection = collection(this.firestore, HeroService.url);
+    this.messageService.add('Heroes fetched');
+    return collectionData(heroCollection) as Observable<HeroInterface[]>;
   }
 
   getHeroById(id: number | undefined | null): Observable<HeroInterface | undefined> {
-    const hero = HEROES.find(h => h.id === id);
-    return of(hero);
+    const heroDocument = doc(this.firestore, HeroService.url + "/" + id);
+    return docData(heroDocument, {idField: 'id'}) as Observable<HeroInterface>;
+  }
+
+  deleteHero(id: string): Promise<void> {
+    const heroDocument = doc(this.firestore, HeroService.url + "/" + id);
+    try {
+      return deleteDoc(heroDocument);
+    } catch (e) {
+      console.error(e);
+      return Promise.reject(e);
+    }
+  }
+
+  addHero(hero: HeroInterface): void {
+    const heroCollection = collection(this.firestore, HeroService.url);
+    try {
+      addDoc(heroCollection, hero);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  updateHero(hero: HeroInterface): void {
+    const heroDocument = doc(this.firestore, HeroService.url + "/" + hero.id);
+    let newHeroJSON = {
+      name: hero.name,
+      attaque: hero.attack,
+      esquive: hero.evasion,
+      degats: hero.damage,
+      PV: hero.health
+    };
+    try {
+      updateDoc(heroDocument, newHeroJSON);
+    } catch (e) {
+      console.error(e);
+    }
   }
 }
