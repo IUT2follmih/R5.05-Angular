@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {UpperCasePipe} from "@angular/common";
 import {HeroInterface} from "../../data/heroInterface";
