@@ -6,7 +6,7 @@
         <a [routerLink]="['/heroes-edit', hero.id]" class="btn justify-start">
           <button class="flex gap-5 justify-center items-center" type="button" [class.btn-active]="hero === selectedHero"
                   (click)="onSelect(hero)">
-            <div class="badge badge-neutral badge-lg">{{ hero.id }}</div>
+            <div class="badge badge-neutral badge-lg">{{ hero.listId }}</div>
             <span class="">{{ hero.name }}</span>
           </button>
         </a>

@@ -19,19 +19,15 @@ import {MessageService} from "../../services/message.service";
 export class HeroDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
 
-  @Input() hero?: HeroInterface;
+  hero?: HeroInterface;
 
-
-  heroID: number | undefined | null;
+  heroID: string | undefined | null;
 
   constructor(private heroService: HeroService, private messageService: MessageService) {
   }
 
   ngOnInit() {
-    console.log(this.heroService.getHeroById(this.heroID));
-    this.route.params.subscribe(params => {
-      this.heroID = +params['id'];
-    });
+    this.heroID = this.route.snapshot.paramMap.get('id');
 
     if (this.heroID) {
       this.heroService.getHeroById(this.heroID).subscribe(hero => this.hero = hero);
@@ -40,4 +36,13 @@ export class HeroDetailComponent implements OnInit {
       this.messageService.add('Error Hero not found');
     }
   };
+
+  voteHero(hero: HeroInterface): void {
+    if (hero.vote > 0) {
+      hero.vote = 0;
+    } else {
+      hero.vote = 1;
+    }
+    this.heroService.updateHero(hero);
+  }
 }

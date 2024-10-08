@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {HeroInterface} from "../data/heroInterface";
-// import {HEROES} from "../data/mock-heroes";
 import {Observable} from "rxjs";
 import {MessageService} from "./message.service";
 import {
@@ -26,10 +25,10 @@ export class HeroService {
   getHeroes(): Observable<HeroInterface[]> {
     const heroCollection = collection(this.firestore, HeroService.url);
     this.messageService.add('Heroes fetched');
-    return collectionData(heroCollection) as Observable<HeroInterface[]>;
+    return collectionData(heroCollection, {idField: 'id'}) as Observable<HeroInterface[]>;
   }
 
-  getHeroById(id: number | undefined | null): Observable<HeroInterface | undefined> {
+  getHeroById(id: string | undefined | null): Observable<HeroInterface | undefined> {
     const heroDocument = doc(this.firestore, HeroService.url + "/" + id);
     return docData(heroDocument, {idField: 'id'}) as Observable<HeroInterface>;
   }
@@ -55,13 +54,7 @@ export class HeroService {
 
   updateHero(hero: HeroInterface): void {
     const heroDocument = doc(this.firestore, HeroService.url + "/" + hero.id);
-    let newHeroJSON = {
-      name: hero.name,
-      attaque: hero.attack,
-      esquive: hero.evasion,
-      degats: hero.damage,
-      PV: hero.health
-    };
+    let newHeroJSON = JSON.parse(JSON.stringify(hero));
     try {
       updateDoc(heroDocument, newHeroJSON);
     } catch (e) {
