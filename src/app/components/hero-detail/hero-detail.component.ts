@@ -5,13 +5,15 @@ import {HeroInterface} from "../../data/heroInterface";
 import {ActivatedRoute} from '@angular/router';
 import {HeroService} from "../../services/hero.service";
 import {MessageService} from "../../services/message.service";
+import {EditHeroComponent} from "../edit-hero/edit-hero.component";
 
 @Component({
   selector: 'app-hero-detail',
   standalone: true,
   imports: [
     FormsModule,
-    UpperCasePipe
+    UpperCasePipe,
+    EditHeroComponent
   ],
   templateUrl: './hero-detail.component.html',
   styleUrl: './hero-detail.component.css'
@@ -19,7 +21,7 @@ import {MessageService} from "../../services/message.service";
 export class HeroDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
 
-  hero?: HeroInterface;
+  hero!: HeroInterface;
 
   heroID: string | undefined | null;
 
@@ -28,10 +30,11 @@ export class HeroDetailComponent implements OnInit {
 
   ngOnInit() {
     this.heroID = this.route.snapshot.paramMap.get('id');
-
     if (this.heroID) {
-      this.heroService.getHeroById(this.heroID).subscribe(hero => this.hero = hero);
-      console.log(this.hero);
+      let checkObservable = this.heroService.getHeroById(this.heroID);
+      if (checkObservable) {
+        checkObservable.subscribe(hero => this.hero = hero as HeroInterface);
+      }
     } else {
       this.messageService.add('Error Hero not found');
     }
@@ -43,6 +46,16 @@ export class HeroDetailComponent implements OnInit {
     } else {
       hero.vote = 1;
     }
+    this.heroService.updateHero(hero);
+  }
+
+  deleteHero(hero: HeroInterface): void {
+    this.messageService.add('Hero deleted');
+    this.heroService.deleteHero(hero.id);
+  }
+
+  updateHero(hero: HeroInterface): void {
+    this.messageService.add('Hero updated');
     this.heroService.updateHero(hero);
   }
 }

@@ -33,7 +33,7 @@ export class HeroService {
     return docData(heroDocument, {idField: 'id'}) as Observable<HeroInterface>;
   }
 
-  deleteHero(id: string): Promise<void> {
+  deleteHero(id: number): Promise<void> {
     const heroDocument = doc(this.firestore, HeroService.url + "/" + id);
     try {
       return deleteDoc(heroDocument);

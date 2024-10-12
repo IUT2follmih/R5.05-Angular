@@ -1,87 +1,137 @@
-<section class="flex flex-col text-white rounded-lg bg-neutral-800 w-screen p-10 h-96 relative gap-5">
-  @if (hero) {
-    <button class="btn btn-square drop-shadow-md absolute top-2 right-2">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-           class="lucide lucide-pencil">
-        <path
-          d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
-        <path d="m15 5 4 4"/>
-      </svg>
-    </button>
-    <div class="flex flex-col">
-      <div class="flex flex-row items-baseline">
-        <h1 class="text-9xl bg-transparent w-full mr-2 max-w-fit">{{ hero.name }}</h1>
-        <button class="badge badge-warning gap-2" (click)="voteHero(hero)">
-          @if (hero.vote === 0) {
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                 class="lucide lucide-star">
-              <polygon
-                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-            </svg>
-          } @else if (hero.vote === 1) {
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="black"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                 class="lucide lucide-star">
-              <polygon
-                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-            </svg>
-          }
-        </button>
-      </div>
-      <p class="text-sm">Hero id : <span class="underline">{{ hero.id }}</span></p>
+<section class="w-screen flex justify-center">
+  <div class="w-fit m-10 bg-neutral-800 rounded-lg flex flex-col p-10 min-h-96 gap-5">
+    @if (hero) {
+      <div class="flex flex-col items-start gap-7 w-full">
+        <div class="w-full flex flex-row items-center justify-between">
+          <button class="badge rounded-lg badge-warning" (click)="voteHero(hero)">
+            @if (hero.vote === 0) {
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   class="lucide lucide-star">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            } @else if (hero.vote === 1) {
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="black"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   class="lucide lucide-star">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            }
+          </button>
+          <div class="flex flex-row gap-2">
+            <button class="btn btn-ghost btn-sm text-red-300 hover:bg-neutral-700 font-normal"
+                    onclick="deleteConfirmation.showModal()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   class="lucide lucide-trash-2">
+                <path d="M3 6h18"/>
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                <line x1="10" x2="10" y1="11" y2="17"/>
+                <line x1="14" x2="14" y1="11" y2="17"/>
+              </svg>
+              <p class="sm:block hidden">Supprimer</p>
+            </button>
+            <button class="btn btn-ghost btn-sm text-neutral-300 hover:bg-neutral-700 font-normal"
+                    (click)="updateHero(hero)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   class="lucide lucide-save">
+                <path
+                  d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>
+                <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/>
+                <path d="M7 3v4a1 1 0 0 0 1 1h7"/>
+              </svg>
+              <p class="sm:block hidden">Mettre à jour</p>
+            </button>
+          </div>
 
-      <!--      <div>-->
-      <!--        <label for="name">Change hero name : </label>-->
-      <!--        <input class="border-2 border-slate-300 hover:border-slate-200 rounded p-1" id="name" [(ngModel)]="hero.name"-->
-      <!--               placeholder="name">-->
-      <!--      </div>-->
-    </div>
-    <div class="flex flex-col bg-base-300 p-5 text-black rounded-lg relative">
-      <div class="flex flex-col w-fit h-fit gap-2">
-        <h2 class="text-xl">Hero stats :</h2>
-        <div class="join join-horizontal gap-2   w-fit h-fit">
-          <div class="badge badge-lg badge-error gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                 class="lucide lucide-heart-pulse">
-              <path
-                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
-              <path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/>
-            </svg>
-            {{ hero.health }}
-          </div>
-          <div class="badge badge-lg badge-neutral gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                 class="lucide lucide-sword">
-              <polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/>
-              <line x1="13" x2="19" y1="19" y2="13"/>
-              <line x1="16" x2="20" y1="16" y2="20"/>
-              <line x1="19" x2="21" y1="21" y2="19"/>
-            </svg>
-            {{ hero.attack }}
-          </div>
-          <div class="badge badge-lg badge-info gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                 class="lucide lucide-rabbit">
-              <path d="M13 16a3 3 0 0 1 2.24 5"/>
-              <path d="M18 12h.01"/>
-              <path
-                d="M18 21h-8a4 4 0 0 1-4-4 7 7 0 0 1 7-7h.2L9.6 6.4a1 1 0 1 1 2.8-2.8L15.8 7h.2c3.3 0 6 2.7 6 6v1a2 2 0 0 1-2 2h-1a3 3 0 0 0-3 3"/>
-              <path d="M20 8.54V4a2 2 0 1 0-4 0v3"/>
-              <path d="M7.612 12.524a3 3 0 1 0-1.6 4.3"/>
-            </svg>
-            {{ hero.evasion }}
+          <dialog id="deleteConfirmation" class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="text-lg font-bold">Êtes-vous sur de vouloir supprimer {{hero.name}} ?</h3>
+              <p class="py-1">Cette action est irréversible !</p>
+
+              <div class="modal-action">
+                <form method="dialog" class="flex flex-row gap-2">
+                  <button class="btn btn-outline">Annuler</button>
+                  <button class="btn btn-error" (click)="deleteHero(this.hero)">Confirmer</button>
+                </form>
+              </div>
+            </div>
+          </dialog>
+
+
+        </div>
+      </div>
+      <div class="flex flex-col text-white">
+        <div class="flex flex-col items-baseline">
+          <input type="text"
+                 placeholder="Nom du héro"
+                 [(ngModel)]="hero.name"
+                 class="lg:text-7xl md:text-6xl sm:text-5xl text-3xl  w-min text-white font-extrabold bg-transparent border-none outline-none placeholder-white placeholder-opacity-50"
+                 maxlength="30"
+          ></div>
+        <p class="text-sm">Hero id : <span class="underline">{{ hero.id }}</span></p>
+      </div>
+      <div class="flex flex-col bg-base-300 p-5 text-black rounded-lg relative">
+        <div class="flex flex-col w-fit h-fit gap-2">
+          <h2 class="text-xl">Hero stats :</h2>
+          <div class="join join-horizontal gap-2 w-fit h-fit">
+            <section class="flex flex-row gap-1 justify-center items-center">
+              <button class="btn btn-circle btn-ghost btn-xs">-</button>
+              <div class="badge badge-lg badge-error gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="lucide lucide-heart-pulse">
+                  <path
+                    d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                  <path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/>
+                </svg>
+                {{ hero.health }}
+              </div>
+              <button class="btn btn-circle btn-ghost btn-xs">+</button>
+            </section>
+            <section class="flex flex-row gap-1 justify-center items-center">
+              <button class="btn btn-circle btn-ghost btn-xs">-</button>
+              <div class="badge badge-lg badge-neutral gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="lucide lucide-sword">
+                  <polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/>
+                  <line x1="13" x2="19" y1="19" y2="13"/>
+                  <line x1="16" x2="20" y1="16" y2="20"/>
+                  <line x1="19" x2="21" y1="21" y2="19"/>
+                </svg>
+                {{ hero.attack }}
+              </div>
+              <button class="btn btn-circle btn-ghost btn-xs">+</button>
+            </section>
+            <section class="flex flex-row gap-1 justify-center items-center">
+              <button class="btn btn-circle btn-ghost btn-xs">-</button>
+              <div class="badge badge-lg badge-info gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="lucide lucide-rabbit">
+                  <path d="M13 16a3 3 0 0 1 2.24 5"/>
+                  <path d="M18 12h.01"/>
+                  <path
+                    d="M18 21h-8a4 4 0 0 1-4-4 7 7 0 0 1 7-7h.2L9.6 6.4a1 1 0 1 1 2.8-2.8L15.8 7h.2c3.3 0 6 2.7 6 6v1a2 2 0 0 1-2 2h-1a3 3 0 0 0-3 3"/>
+                  <path d="M20 8.54V4a2 2 0 1 0-4 0v3"/>
+                  <path d="M7.612 12.524a3 3 0 1 0-1.6 4.3"/>
+                </svg>
+                {{ hero.evasion }}
+              </div>
+              <button class="btn btn-circle btn-ghost btn-xs">+</button>
+            </section>
           </div>
         </div>
       </div>
-    </div>
-  } @else {
-    <h2>
-      Aucun hero selectionné !
-    </h2>
-  }
+    } @else {
+      <h2>
+        Aucun hero selectionné !
+      </h2>
+    }
+  </div>
 </section>
