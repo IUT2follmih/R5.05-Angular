@@ -35,7 +35,7 @@
               <p class="sm:block hidden">Supprimer</p>
             </button>
             <button class="btn btn-ghost btn-sm text-neutral-300 hover:bg-neutral-700 font-normal"
-                    (click)="updateHero(hero)">
+                    (click)="heroService.updateHero(hero)">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="lucide lucide-save">
@@ -44,19 +44,38 @@
                 <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/>
                 <path d="M7 3v4a1 1 0 0 0 1 1h7"/>
               </svg>
-              <p class="sm:block hidden">Mettre à jour</p>
+              @if (heroService.isUpdating) {
+                @if (heroService.isUpdateSuccess === 1) {
+                  <span class="loading loading-spinner loading-md"></span>
+                } @else if (heroService.isUpdateSuccess === 2) {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                       stroke="#22c55d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                       class="lucide lucide-check">
+                    <path d="M20 6 9 17l-5-5"/>
+                  </svg>
+                } @else if (heroService.isUpdateSuccess === 0) {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                       stroke="#dc2625" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                       class="lucide lucide-x">
+                    <path d="M18 6 6 18"/>
+                    <path d="m6 6 12 12"/>
+                  </svg>
+                }
+              } @else {
+                <p class="sm:block hidden">Mettre à jour</p>
+              }
             </button>
           </div>
 
           <dialog id="deleteConfirmation" class="modal modal-bottom sm:modal-middle">
             <div class="modal-box">
-              <h3 class="text-lg font-bold">Êtes-vous sur de vouloir supprimer {{hero.name}} ?</h3>
+              <h3 class="text-lg font-bold">Êtes-vous sur de vouloir supprimer {{ hero.name }} ?</h3>
               <p class="py-1">Cette action est irréversible !</p>
 
               <div class="modal-action">
                 <form method="dialog" class="flex flex-row gap-2">
-                  <button class="btn btn-outline">Annuler</button>
-                  <button class="btn btn-error" (click)="deleteHero(this.hero)">Confirmer</button>
+                  <button class="btn ">Annuler</button>
+                  <button class="btn btn-error" (click)="heroService.deleteHero(this.hero.id)">Confirmer</button>
                 </form>
               </div>
             </div>
@@ -78,9 +97,20 @@
       <div class="flex flex-col bg-base-300 p-5 text-black rounded-lg relative">
         <div class="flex flex-col w-fit h-fit gap-2">
           <h2 class="text-xl">Hero stats :</h2>
+          <p class="text-md">
+            Vous pouvez attribuer :
+            <span class="font-bold text-lg">
+              {{ heroService.getStatPointsLeft(hero) }}
+            </span>
+            points
+          </p>
           <div class="join join-horizontal gap-2 w-fit h-fit">
             <section class="flex flex-row gap-1 justify-center items-center">
-              <button class="btn btn-circle btn-ghost btn-xs">-</button>
+              <button class="btn btn-circle btn-ghost btn-xs disabled:opacity-50 disabled:bg-transparent"
+                      (click)="heroService.updateStat(hero, 'health', false)"
+                      [disabled]="heroService.isMinStatReached(hero, 'health')"
+              >-
+              </button>
               <div class="badge badge-lg badge-error gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -91,10 +121,18 @@
                 </svg>
                 {{ hero.health }}
               </div>
-              <button class="btn btn-circle btn-ghost btn-xs">+</button>
+              <button class="btn btn-circle btn-ghost btn-xs disabled:opacity-50 disabled:bg-transparent"
+                      (click)="heroService.updateStat(hero, 'health', true)"
+                      [disabled]="heroService.getStatPointsLeft(hero) === 0"
+              >+
+              </button>
             </section>
             <section class="flex flex-row gap-1 justify-center items-center">
-              <button class="btn btn-circle btn-ghost btn-xs">-</button>
+              <button class="btn btn-circle btn-ghost btn-xs disabled:opacity-50 disabled:bg-transparent"
+                      (click)="heroService.updateStat(hero, 'attack', false)"
+                      [disabled]="heroService.isMinStatReached(hero, 'attack')"
+              >-
+              </button>
               <div class="badge badge-lg badge-neutral gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -106,10 +144,18 @@
                 </svg>
                 {{ hero.attack }}
               </div>
-              <button class="btn btn-circle btn-ghost btn-xs">+</button>
+              <button class="btn btn-circle btn-ghost btn-xs disabled:opacity-50 disabled:bg-transparent"
+                      (click)="heroService.updateStat(hero, 'attack', true)"
+                      [disabled]="heroService.getStatPointsLeft(hero) === 0"
+              >+
+              </button>
             </section>
             <section class="flex flex-row gap-1 justify-center items-center">
-              <button class="btn btn-circle btn-ghost btn-xs">-</button>
+              <button class="btn btn-circle btn-ghost btn-xs disabled:opacity-50 disabled:bg-transparent"
+                      (click)="heroService.updateStat(hero, 'evasion', false)"
+                      [disabled]="heroService.isMinStatReached(hero, 'evasion')"
+              >-
+              </button>
               <div class="badge badge-lg badge-info gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -123,7 +169,11 @@
                 </svg>
                 {{ hero.evasion }}
               </div>
-              <button class="btn btn-circle btn-ghost btn-xs">+</button>
+              <button class="btn btn-circle btn-ghost btn-xs disabled:opacity-50 disabled:bg-transparent"
+                      (click)="heroService.updateStat(hero, 'evasion', true)"
+                      [disabled]="heroService.getStatPointsLeft(hero) === 0"
+              >+
+              </button>
             </section>
           </div>
         </div>

@@ -25,7 +25,7 @@ export class HeroDetailComponent implements OnInit {
 
   heroID: string | undefined | null;
 
-  constructor(private heroService: HeroService, private messageService: MessageService) {
+  constructor(protected heroService: HeroService, private messageService: MessageService) {
   }
 
   ngOnInit() {
@@ -46,16 +46,6 @@ export class HeroDetailComponent implements OnInit {
     } else {
       hero.vote = 1;
     }
-    this.heroService.updateHero(hero);
-  }
-
-  deleteHero(hero: HeroInterface): void {
-    this.messageService.add('Hero deleted');
-    this.heroService.deleteHero(hero.id);
-  }
-
-  updateHero(hero: HeroInterface): void {
-    this.messageService.add('Hero updated');
     this.heroService.updateHero(hero);
   }
 }
