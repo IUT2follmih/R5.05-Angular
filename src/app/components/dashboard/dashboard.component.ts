@@ -4,12 +4,14 @@ import {HeroService} from "../../services/hero.service";
 import {RouterLink} from "@angular/router";
 import {MessageService} from "../../services/message.service";
 import {Subscription} from "rxjs";
+import {CardHeroComponent} from "../card-hero/card-hero.component";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    RouterLink
+    RouterLink,
+    CardHeroComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
